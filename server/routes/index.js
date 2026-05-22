@@ -5,6 +5,10 @@ const chatController = require('../controllers/chatController');
 const analyticsController = require('../controllers/analyticsController');
 const upload = require('../middleware/upload');
 
+router.get('/health', (req, res) => {
+  res.status(200).json({ success: true, message: 'API is running' });
+});
+
 // Document Routes
 router.post('/upload', upload.array('files', 10), documentController.uploadDocuments);
 router.post('/analyze', documentController.analyzeDocument);
