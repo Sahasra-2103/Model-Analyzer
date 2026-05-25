@@ -1,12 +1,16 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm install && npm install --prefix client",
+  "installCommand": "npm install && node scripts/download-tessdata.js && npm install --prefix client",
   "buildCommand": "npm run build --prefix client",
   "outputDirectory": "client/dist",
   "functions": {
     "api/index.js": {
       "maxDuration": 60,
-      "includeFiles": "server/eng.traineddata"
+      "memory": 1024,
+      "includeFiles": [
+        "server/eng.traineddata",
+        "node_modules/tesseract.js-core/**"
+      ]
     }
   },
   "rewrites": [

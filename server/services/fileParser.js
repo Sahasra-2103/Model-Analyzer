@@ -5,7 +5,33 @@ const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
 const Tesseract = require('tesseract.js');
 
-const OCR_TIMEOUT_MS = Number(process.env.OCR_TIMEOUT_MS || 30000);
+const DEFAULT_OCR_TIMEOUT_MS = process.env.VERCEL ? 55000 : 30000;
+const OCR_TIMEOUT_MS = Number(process.env.OCR_TIMEOUT_MS || DEFAULT_OCR_TIMEOUT_MS);
+
+const resolveLangPath = () => {
+  const candidates = process.env.VERCEL
+    ? [
+        path.join(process.cwd(), 'server'),
+        path.join(__dirname, '..'),
+      ]
+    : [
+        path.join(__dirname, '..'),
+        path.join(process.cwd(), 'server'),
+      ];
+
+  for (const dir of candidates) {
+    const trainedData = path.join(dir, 'eng.traineddata');
+    if (fs.existsSync(trainedData)) {
+      return dir;
+    }
+  }
+
+  console.warn(
+    'eng.traineddata not found; checked:',
+    candidates.map((d) => path.join(d, 'eng.traineddata'))
+  );
+  return candidates[0];
+};
 
 const withTimeout = (promise, ms, message) => {
   let timeoutId;
@@ -18,8 +44,15 @@ const withTimeout = (promise, ms, message) => {
 
 const extractImageText = async (filePath) => {
   let worker;
-  const langPath = path.join(__dirname, '..');
-  const cachePath = process.env.VERCEL ? os.tmpdir() : path.join(__dirname, '..');
+  const langPath = resolveLangPath();
+  const trainedDataPath = path.join(langPath, 'eng.traineddata');
+  const cachePath = process.env.VERCEL ? os.tmpdir() : langPath;
+
+  if (!fs.existsSync(trainedDataPath)) {
+    throw new Error(
+      'OCR language data (eng.traineddata) is missing. Run: node scripts/download-tessdata.js'
+    );
+  }
 
   try {
     worker = await withTimeout(
@@ -27,6 +60,7 @@ const extractImageText = async (filePath) => {
         langPath,
         cachePath,
         gzip: false,
+        cacheMethod: process.env.VERCEL ? 'none' : 'read',
         logger: (message) => {
           if (message.status) {
             console.log(`OCR ${message.status}${message.progress ? ` ${Math.round(message.progress * 100)}%` : ''}`);
