@@ -8,7 +8,6 @@
     "server": "node --watch server/server.js",
     "client": "npm run dev --prefix client",
     "build": "npm run build --prefix client",
-    "postinstall": "node scripts/download-tessdata.js",
     "download-tessdata": "node scripts/download-tessdata.js"
   },
   "dependencies": {
