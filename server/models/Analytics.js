@@ -10,13 +10,11 @@ const analyticsSchema = new mongoose.Schema({
     default: 0
   },
   documentTypes: {
-    type: Map,
-    of: Number,
+    type: Object,
     default: {}
   },
   languageDistribution: {
-    type: Map,
-    of: Number,
+    type: Object,
     default: {}
   }
 });

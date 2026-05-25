@@ -89,7 +89,7 @@ const Analytics = () => {
                   <div style={{ width: '100%' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
                       <span style={{ fontWeight: '500', fontSize: '0.9rem', color: 'var(--text-color)', maxWidth: '70%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {type.split('/')[1]?.toUpperCase() || type}
+                        {type.toUpperCase()}
                       </span>
                       <strong style={{ color: 'var(--primary-color)' }}>{count} ({percentage}%)</strong>
                     </div>

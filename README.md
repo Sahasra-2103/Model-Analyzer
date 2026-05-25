@@ -49,7 +49,7 @@ Ensure you set your environment variables in the Vercel dashboard.
 
 **Important — Vercel Root Directory:** In [Vercel Project Settings → General → Root Directory](https://vercel.com/docs/deployments/configure-a-build#root-directory), leave the field **empty** (repository root). Do **not** set it to `client`. If Root Directory is `client`, install fails with `client/client/package.json` not found and the API (`api/index.js`) will not deploy.
 
-Image OCR requires `server/eng.traineddata` (bundled via `vercel.json` `includeFiles`). To regenerate it locally, run `npm run download-tessdata`.
+On **Vercel**, image text extraction uses your **GROK_API_KEY** vision model (Groq: `llama-3.2-11b-vision-preview`) instead of Tesseract. Locally, Tesseract is used with optional vision fallback. Set `OCR_PROVIDER=vision` or `tesseract` to force one provider. Optional: `OCR_VISION_MODEL` for a custom vision model name.
 
 ```bash
 vercel --prod

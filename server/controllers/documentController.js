@@ -3,6 +3,7 @@ const Analysis = require('../models/Analysis');
 const Analytics = require('../models/Analytics');
 const fileParser = require('../services/fileParser');
 const aiProvider = require('../services/ai/aiProvider');
+const { getFileTypeKey } = require('../utils/fileTypeKey');
 const fs = require('fs');
 
 exports.uploadDocuments = async (req, res, next) => {
@@ -73,10 +74,14 @@ exports.analyzeDocument = async (req, res, next) => {
     }
     
     analytics.totalDocuments += 1;
-    analytics.documentTypes.set(doc.fileType, (analytics.documentTypes.get(doc.fileType) || 0) + 1);
+    const typeKey = getFileTypeKey(doc.fileType, doc.fileName);
+    analytics.documentTypes[typeKey] = (analytics.documentTypes[typeKey] || 0) + 1;
     if (analysis.language) {
-      analytics.languageDistribution.set(analysis.language, (analytics.languageDistribution.get(analysis.language) || 0) + 1);
+      const langKey = String(analysis.language).replace(/\./g, '_');
+      analytics.languageDistribution[langKey] = (analytics.languageDistribution[langKey] || 0) + 1;
     }
+    analytics.markModified('documentTypes');
+    analytics.markModified('languageDistribution');
     await analytics.save();
 
     res.status(200).json({ success: true, data: analysis });
