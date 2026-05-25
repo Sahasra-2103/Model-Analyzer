@@ -47,6 +47,8 @@ A full-stack SaaS application that intelligently analyzes uploaded documents and
 This project includes a `vercel.json` for easy deployment to Vercel. 
 Ensure you set your environment variables in the Vercel dashboard.
 
+**Important — Vercel Root Directory:** In [Vercel Project Settings → General → Root Directory](https://vercel.com/docs/deployments/configure-a-build#root-directory), leave the field **empty** (repository root). Do **not** set it to `client`. If Root Directory is `client`, install fails with `client/client/package.json` not found and the API (`api/index.js`) will not deploy.
+
 Image OCR requires `server/eng.traineddata` (bundled via `vercel.json` `includeFiles`). To regenerate it locally, run `npm run download-tessdata`.
 
 ```bash
