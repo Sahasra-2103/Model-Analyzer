@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getHistory } from '../services/api';
 import ResultCard from '../components/ResultCard';
 import { Clock, FileText, Search, ChevronRight, Inbox } from 'lucide-react';

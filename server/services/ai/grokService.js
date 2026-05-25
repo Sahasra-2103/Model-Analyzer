@@ -1,6 +1,8 @@
 const axios = require('axios');
 const promptService = require('./promptService');
 
+const AI_REQUEST_TIMEOUT_MS = Number(process.env.AI_REQUEST_TIMEOUT_MS || 45000);
+
 const stripJsonFence = (value) => {
   return value
     .trim()
@@ -35,6 +37,7 @@ const getGrokResponse = async (prompt, systemMessage = "") => {
         max_tokens: 1800,
       },
       {
+        timeout: AI_REQUEST_TIMEOUT_MS,
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json'

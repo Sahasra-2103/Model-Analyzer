@@ -1,7 +1,14 @@
 import axios from 'axios';
 
+const configuredApiUrl = import.meta.env.VITE_API_URL;
+const localApiPattern = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/api\/?$/i;
+const baseURL = import.meta.env.PROD && (!configuredApiUrl || localApiPattern.test(configuredApiUrl))
+  ? '/api'
+  : configuredApiUrl || 'http://localhost:5000/api';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL,
+  timeout: 120000,
 });
 
 export const uploadFiles = async (files) => {

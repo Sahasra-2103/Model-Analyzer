@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import { Moon, Sun, BrainCircuit } from 'lucide-react';

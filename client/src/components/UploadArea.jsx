@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { UploadCloud, X, FileText, FileImage, FileCode, CheckCircle2 } from 'lucide-react';
 
 const UploadArea = ({ onUpload }) => {

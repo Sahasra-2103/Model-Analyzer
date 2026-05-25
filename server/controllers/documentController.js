@@ -16,6 +16,12 @@ exports.uploadDocuments = async (req, res, next) => {
     for (const file of req.files) {
       // Parse file content
       const parsedData = await fileParser.parseFile(file);
+      if (parsedData.error) {
+        if (fs.existsSync(file.path)) {
+          fs.unlinkSync(file.path);
+        }
+        return res.status(422).json({ success: false, error: parsedData.error });
+      }
       
       // Save document
       const doc = await Document.create({

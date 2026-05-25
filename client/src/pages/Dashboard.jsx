@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import UploadArea from '../components/UploadArea';
 import ResultCard from '../components/ResultCard';
 import { uploadFiles, analyzeDocument } from '../services/api';
@@ -17,6 +17,9 @@ const Dashboard = () => {
       // 1. Upload files
       const uploadRes = await uploadFiles(files);
       if (!uploadRes.success) throw new Error('Upload failed');
+      if (!Array.isArray(uploadRes.data) || uploadRes.data.length === 0) {
+        throw new Error('No documents were returned after upload');
+      }
       
       const newResults = [];
       
@@ -29,13 +32,17 @@ const Dashboard = () => {
             fileName: doc.fileName,
             analysis: analyzeRes.data
           });
+        } else {
+          throw new Error(analyzeRes.error || `Analysis failed for ${doc.fileName}`);
         }
       }
       
       setResults(prev => [...newResults, ...prev]);
     } catch (err) {
       console.error(err);
-      const serverMsg = err.response?.data?.error || err.message || 'Unknown error occurred';
+      const serverMsg = err.code === 'ECONNABORTED'
+        ? 'The request took too long. Please try a smaller/clearer image or check the deployed API logs.'
+        : err.response?.data?.error || err.message || 'Unknown error occurred';
       setError(`Processing Error: ${serverMsg}`);
     } finally {
       setLoading(false);

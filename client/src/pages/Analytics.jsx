@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getAnalytics } from '../services/api';
-import { BarChart3, PieChart, FileText, Globe, Layers, Activity } from 'lucide-react';
+import { BarChart3, FileText, Globe, Layers, Activity } from 'lucide-react';
 
 const Analytics = () => {
   const [analytics, setAnalytics] = useState(null);

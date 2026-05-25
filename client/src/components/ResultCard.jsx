@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Copy, Download, MessageSquare, Send } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Copy, MessageSquare, Send } from 'lucide-react';
 import { chatWithDocument } from '../services/api';
 
 const ResultCard = ({ result, docId }) => {
