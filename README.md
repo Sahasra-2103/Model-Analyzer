@@ -47,10 +47,10 @@ A full-stack SaaS application that intelligently analyzes uploaded documents and
 This project includes a `vercel.json` for easy deployment to Vercel. 
 Ensure you set your environment variables in the Vercel dashboard.
 
-Image OCR requires `server/eng.traineddata`. It is downloaded automatically during `npm install` (see `scripts/download-tessdata.js`). On Vercel, the install step runs this script and bundles the file with the API function.
+Image OCR requires `server/eng.traineddata` (bundled via `vercel.json` `includeFiles`). To regenerate it locally, run `npm run download-tessdata`.
 
 ```bash
 vercel --prod
 ```
 
-If image upload fails with **OCR initialization timed out** after deploy, redeploy so the install step can fetch tessdata, or run `npm run download-tessdata` locally and commit `server/eng.traineddata`.
+If image upload fails with **OCR initialization timed out** after deploy, run `npm run download-tessdata` locally and commit `server/eng.traineddata`.
